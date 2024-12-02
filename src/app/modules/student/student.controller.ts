@@ -1,10 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import { StatusCodes } from 'http-status-codes';
+import catchAsync from '../../utils/catchAsync';
 
-const getSingleStudent = async (req: Request, res: Response ,next:NextFunction) => {
-  try {
+
+
+const getSingleStudent =catchAsync(
+  async (req, res) => {
     const { studentID } = req.params;
     const result = await StudentServices.getSingleStudentFromDB(studentID);
 
@@ -14,39 +16,39 @@ const getSingleStudent = async (req: Request, res: Response ,next:NextFunction) 
       message:'Student Retrieve  successfully',
       data:result
     })
-    
-  } catch (err) {
-   next(err);
   }
-};
-const deleteStudent = async (req: Request, res: Response,next:NextFunction) => {
-  try {
+)
+
+
+
+
+
+
+const deleteStudent = catchAsync(
+  async (req, res) => {
     const { studentID } = req.params;
-    const result = await StudentServices.deleteStudentFromDB(studentID);
-    sendResponse(res,{
-      statusCode:StatusCodes.OK,
-      success:true,
-      message:'Student deleted successfully',
-      data:result
-    })
-  } catch (err) {
-  next(err);
+      const result = await StudentServices.deleteStudentFromDB(studentID);
+      sendResponse(res,{
+        statusCode:StatusCodes.OK,
+        success:true,
+        message:'Student deleted successfully',
+        data:result
+      })
   }
-};
-const getAllStudent = async (req: Request, res: Response,next:NextFunction) => {
-  try {
+);
+
+
+const getAllStudent= catchAsync(
+  async (req, res) => {
     const result = await StudentServices.getAllStudentFromDB();
-    sendResponse(res,{
-      statusCode:StatusCodes.OK,
-      success:true,
-      message:'All Student Retrieve successfully',
-      data:result
-    })
-    
-  } catch (err) {
-   next(err);
+      sendResponse(res,{
+        statusCode:StatusCodes.OK,
+        success:true,
+        message:'All Student Retrieve successfully',
+        data:result
+      })
   }
-};
+);
 
 export const StudentController = {
 

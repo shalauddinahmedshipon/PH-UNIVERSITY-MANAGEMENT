@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const userNameSchema = z.object({
+const userNameValidationSchema = z.object({
   firstName: z
     .string()
     .max(20, "First name cannot be more than 20 characters.")
@@ -15,7 +15,7 @@ const userNameSchema = z.object({
     }),
 });
 
-const guardianSchema = z.object({
+const guardianValidationSchema = z.object({
   fatherName: z.string().nonempty("Father's name is required."),
   fatherOccupation: z.string().nonempty("Father's occupation is required."),
   fatherContactNo: z.string().nonempty("Father's contact number is required."),
@@ -24,44 +24,45 @@ const guardianSchema = z.object({
   motherContactNo: z.string().nonempty("Mother's contact number is required."),
 });
 
-const localGuardianSchema = z.object({
+const localGuardianValidationSchema = z.object({
   name: z.string().nonempty("Local guardian's name is required."),
   address: z.string().nonempty("Local guardian's address is required."),
   contactNo: z.string().nonempty("Local guardian's contact number is required."),
 });
 
-const studentSchema = z.object({
-  id: z.string().nonempty("Student ID is required."),
-  name: userNameSchema,
-  gender: z.enum(['male', 'female', 'other'], {
-    errorMap: () => ({ message: "Gender must be 'male', 'female', or 'other'." }),
-  }),
-  password:z.string().nonempty('Password is required ').max(20),
-  dateOfBirth: z.string().optional(),
-  email: z
-    .string()
-    .email("Email must be a valid email address.")
-    .nonempty("Email address is required."),
-  contactNo: z.string().nonempty("Contact number is required."),
-  emergencyContactNo: z.string().nonempty("Emergency contact number is required."),
-  presentAddress: z.string().nonempty("Present address is required."),
-  permanentAddress: z.string().nonempty("Permanent address is required."),
-  profileImg: z.string().optional(),
-  isActive: z
-    .enum(['active', 'blocked'])
-    .default('active')
-    .refine((value) => ['active', 'blocked'].includes(value), {
-      message: "Status must be 'active' or 'blocked'.",
-    }),
-  bloodGroup: z
-    .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
-    .optional()
-    .refine((value) => value, {
-      message: "Blood group must be a valid type.",
-    }),
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  isDeleted:z.boolean()
+const createStudentValidationSchema = z.object({
+  body: z.object({
+    password:z.string().nonempty('Password is required ').max(20),
+    student:z.object({
+      name: userNameValidationSchema,
+      gender: z.enum(['male', 'female', 'other'], {
+        errorMap: () => ({ message: "Gender must be 'male', 'female', or 'other'." }),
+      }),
+      dateOfBirth: z.string().optional(),
+      email: z
+        .string()
+        .email("Email must be a valid email address.")
+        .nonempty("Email address is required."),
+      contactNo: z.string().nonempty("Contact number is required."),
+      emergencyContactNo: z.string().nonempty("Emergency contact number is required."),
+      presentAddress: z.string().nonempty("Present address is required."),
+      permanentAddress: z.string().nonempty("Permanent address is required."),
+      profileImg: z.string().optional(),
+      bloodGroup: z
+        .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+        .optional()
+        .refine((value) => value, {
+          message: "Blood group must be a valid type.",
+        }),
+      admissionSemester:z.string(),
+      guardian: guardianValidationSchema,
+      localGuardian: localGuardianValidationSchema
+    }
+      
+    )
+  })
 });
 
-export default studentSchema;
+export const studentValidations = {
+createStudentValidationSchema
+}

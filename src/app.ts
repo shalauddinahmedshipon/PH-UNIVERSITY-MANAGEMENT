@@ -5,6 +5,7 @@ import notFound from './app/middlewares/notFound';
 import router from './app/routes/Index';
 
 
+
 const app: Application = express();
 
 // middleware

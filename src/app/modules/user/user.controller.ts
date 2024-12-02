@@ -1,17 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
+
 import { UserServices } from './user.service';
 import sendResponse from '../../utils/sendResponse';
 import { StatusCodes } from 'http-status-codes';
+import catchAsync from '../../utils/catchAsync';
 
 
 
 
-const createStudent = async (req: Request, res: Response,next:NextFunction) => {
-  
-  try {
-
+const createStudent = catchAsync(
+  async (req, res) => {
     const {password, student: studentData } = req.body;
-    // const zodParseData = studentSchema.parse(studentData);
     const result = await UserServices.createStudentIntoDB(password,studentData);
     console.log(studentData);
     sendResponse(res,{
@@ -20,10 +18,9 @@ const createStudent = async (req: Request, res: Response,next:NextFunction) => {
       message:' Student Created successfully',
       data:result
     })
-  } catch (err) {
-   next(err)
+   
   }
-};
+);
 
 
 export const UserController = {

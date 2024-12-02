@@ -84,12 +84,7 @@ const studentSchema = new Schema<TStudent,StudentModel>({
     required: [true, 'Student ID is required.'],
     unique: true,
   },
-  // password: {
-  //   type: String,
-  //   required: [true, 'Student ID is required.'],
-  //   maxlength:[20,'password can not more than 20 character'],
-
-  // },
+ 
   user:{
     type:Schema.Types.ObjectId,
     required:[true, 'User id is required.'],
@@ -105,7 +100,7 @@ const studentSchema = new Schema<TStudent,StudentModel>({
     },
     required: [true, 'Gender is required.'],
   },
-  dateOfBirth: { type: String },
+  dateOfBirth: { type: Date },
   email: {
     type: String,
     required: [true, 'Email address is required.'],
@@ -132,6 +127,10 @@ const studentSchema = new Schema<TStudent,StudentModel>({
     required: [true, 'Permanent address is required.'],
   },
   profileImg: { type: String },
+  admissionSemester:{
+    type: Schema.Types.ObjectId,
+    ref:'AcademicSemester'
+  },
  
   bloodGroup: {
     type: String,
