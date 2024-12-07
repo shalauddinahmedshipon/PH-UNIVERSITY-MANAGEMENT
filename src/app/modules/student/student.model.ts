@@ -127,9 +127,17 @@ const studentSchema = new Schema<TStudent,StudentModel>({
     required: [true, 'Permanent address is required.'],
   },
   profileImg: { type: String },
+
+  academicDepartment: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicDepartment',
+    required: true,
+  },
+
   admissionSemester:{
     type: Schema.Types.ObjectId,
-    ref:'AcademicSemester'
+    ref:'AcademicSemester',
+    required:true
   },
  
   bloodGroup: {
