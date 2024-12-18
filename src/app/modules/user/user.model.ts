@@ -37,9 +37,6 @@ const UserSchema = new Schema<TUser>({
 })
 
 
-
-
-
 // pre-save middleware / hooks 
 UserSchema.pre('save',async function(next){
   const user = this;

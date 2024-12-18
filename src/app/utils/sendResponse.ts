@@ -6,6 +6,7 @@ type TResponse<T>={
   message?:string;
   data:T
 }
+
 const sendResponse =<T>(
   res:Response,
   data:TResponse<T>
