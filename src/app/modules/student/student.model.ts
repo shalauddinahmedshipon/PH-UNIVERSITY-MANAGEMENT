@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 import {
-  
   StudentModel,
   TGuardian,
   TLocalGuardian,
@@ -133,13 +132,11 @@ const studentSchema = new Schema<TStudent,StudentModel>({
     ref: 'AcademicDepartment',
     required: true,
   },
-
   admissionSemester:{
     type: Schema.Types.ObjectId,
     ref:'AcademicSemester',
     required:true
   },
- 
   bloodGroup: {
     type: String,
     enum: {
@@ -156,7 +153,7 @@ const studentSchema = new Schema<TStudent,StudentModel>({
 },{toJSON:{virtuals:true}});
 
 studentSchema.virtual('fullName').get(function(){
-  return `${this.name.firstName} ${this.name.lastName}`
+  return `${this.name?.firstName} ${this.name?.lastName}`
 })
 
 studentSchema.pre('find',async function(next){
