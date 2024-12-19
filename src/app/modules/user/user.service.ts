@@ -1,6 +1,6 @@
 import config from "../../config";
 import { TStudent } from "../student/student.interface";
-import { TUser } from "./user.interface";
+import { IUser } from "./user.interface";
 import {  User } from "./user.model";
 import { Student } from "../student/student.model";
 import { AcademicSemester } from "../academicSemester/academicSemester.mode";
@@ -15,7 +15,7 @@ import { Admin } from "../admin/admin.model";
 
 const createStudentIntoDB = async (password:string , payload:TStudent) => {
 //  create a user object 
-const userData:Partial<TUser> = {};
+const userData:Partial<IUser> = {};
 
 
   //if password is not given, use default password
@@ -71,7 +71,7 @@ const session = await mongoose.startSession();
 
 const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   // create a user object
-  const userData: Partial<TUser> = {};
+  const userData: Partial<IUser> = {};
 
   //if password is not given , use deafult password
   userData.password = password || (config.default_password as string);
@@ -127,7 +127,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 
 const createAdminIntoDB = async (password: string, payload: TFaculty) => {
   // create a user object
-  const userData: Partial<TUser> = {};
+  const userData: Partial<IUser> = {};
 
   //if password is not given , use deafult password
   userData.password = password || (config.default_password as string);

@@ -89,6 +89,7 @@ const updateCourseIntoDB = async(id:string,payload:Partial<TCourse>)=>{
     throw new AppError(StatusCodes.BAD_REQUEST,"Failed to update course")
   }
  
+  
 
   
 }
