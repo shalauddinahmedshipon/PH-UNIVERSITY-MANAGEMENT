@@ -4,13 +4,13 @@ import {
   TGuardian,
   TLocalGuardian,
   TStudent,
-  TUserName,
+  IUserName,
 } from './student.interface';
 import validator from 'validator';
 
 
 
-const userNameSchema = new Schema<TUserName>({
+const userNameSchema = new Schema<IUserName>({
   firstName: {
     type: String,
     required: [true, 'First name is required.'],
