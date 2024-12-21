@@ -13,6 +13,8 @@ import { AcademicDepartment } from "../academicDepartment/academicDepartment.mod
 import { Faculty } from "../faculty/faculty.model";
 import { Admin } from "../admin/admin.model";
 
+
+
 const createStudentIntoDB = async (password:string , payload:TStudent) => {
 //  create a user object 
 const userData:Partial<IUser> = {};
