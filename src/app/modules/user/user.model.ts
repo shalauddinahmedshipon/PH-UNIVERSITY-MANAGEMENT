@@ -3,6 +3,7 @@ import { IUser, UserModel } from "./user.interface";
 import config from "../../config";
 import bcrypt from "bcrypt";  
 
+
 const UserSchema = new Schema<IUser,UserModel>({
   id: {
     type: String,
@@ -11,11 +12,15 @@ const UserSchema = new Schema<IUser,UserModel>({
   },
   password: {
     type: String,
-    required:true
+    required:true,
+    select:0
   },
   needsPasswordChange: {
     type: Boolean,
     default:true
+  },
+  passwordChangedAt:{
+    type:Date
   },
   isDeleted: {
     type: Boolean,
@@ -48,10 +53,11 @@ UserSchema.pre('save',async function(next){
 UserSchema.post('save',function(doc,next){
   doc.password = '';
   next();
+  
 })
 
 UserSchema.statics.isUserExistsByCustomId=async function (id:string) {
-return  await User.findOne({id});
+return  await User.findOne({id}).select('+password');
 }
 
 UserSchema.statics.isPasswordMatched= async function(plainTextPassword,hashedPassword){
