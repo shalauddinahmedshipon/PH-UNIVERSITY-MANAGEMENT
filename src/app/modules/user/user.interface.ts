@@ -11,10 +11,12 @@ export interface IUser {
   isDeleted:boolean
 };
 
-export interface UserModel extends Model<IUser> {
-  // myStaticMethod(): number;
+export interface UserModel extends Model<IUser> { 
   isUserExistsByCustomId(id:string):Promise<IUser>;
   isPasswordMatched(plainTextPassword:string,hashedPassword:string):Promise<boolean>
+  isJWTIssuedBeforePasswordChanged(passwordChangedTimestamp:Date,
+    jwtIssuedTimestamp:number
+  ):boolean;
 }
 
 export type TUserRole = keyof typeof USER_ROLE ;
