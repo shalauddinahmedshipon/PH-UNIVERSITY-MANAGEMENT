@@ -4,7 +4,7 @@ import AppError from "../../error/AppError";
 import { User } from "../user/user.model";
 import { TLogin } from "./auth.interface";
 import bcrypt from 'bcrypt'
-import { createToken } from "./auth.utils";
+import { createToken, verifyToken } from "./auth.utils";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../../utils/sendEmail";
 
@@ -205,7 +205,8 @@ const newHashedPassword = await bcrypt.hash(payload.newPassword,Number(process.e
 }
 
 const refreshToken = async(token:string)=>{
- const decoded = jwt.verify(token,process.env.JWT_REFRESH_SECRET as string )as JwtPayload;
+ const decoded = verifyToken(token,process.env.JWT_REFRESH_SECRET as string)
+//  jwt.verify(token,process.env.JWT_REFRESH_SECRET as string )as JwtPayload;
 
  const {userId,iat} = decoded;
 
@@ -251,11 +252,14 @@ return {accessToken}
 
 }
 
+
+
 export const authServices ={
   loginUser,
   changPasswordIntoDB,
   refreshToken,
   forgetPassword,
-  resetPassword
+  resetPassword,
+ 
 }
 
