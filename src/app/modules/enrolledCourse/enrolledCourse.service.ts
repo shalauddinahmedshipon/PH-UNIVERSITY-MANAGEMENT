@@ -8,6 +8,8 @@ import { EnrolledCourse } from "./enrolledCourse.model";
 import mongoose from "mongoose";
 import { SemesterRegistration } from "../semesterRegistration/semesterRegistration.model";
 import { Course } from "../course/course.model";
+import { Faculty } from "../faculty/faculty.model";
+import { calculateGradeAndPoints } from "./enrolledCourse.utils";
 
 const createEnrolledCourseIntoDB=async(
 userId:string,payload:TEnrolledCourse
@@ -85,7 +87,7 @@ const enrolledCourses = await EnrolledCourse.aggregate([
     }
   }
 ])
-console.log(enrolledCourses);
+// console.log(enrolledCourses);
 
 //total enrolled credits + new enrolled course credit> maxCredit
 const totalCredits=enrolledCourses.length>0?enrolledCourses[0].totalEnrolledCredits:0;
@@ -135,6 +137,84 @@ await OfferedCourse.findByIdAndUpdate(offeredCourse,{
   }
 };
 
+
+
+const updateEnrolledCourseMarksIntoDB=async(
+  facultyId:string,
+  payload:Partial<TEnrolledCourse>
+)=>{
+const {semesterRegistration,offeredCourse,student,courseMarks}=payload;
+
+const isSemesterRegistrationExists=await SemesterRegistration.findById(semesterRegistration);
+if(!isSemesterRegistrationExists){
+  throw new AppError(StatusCodes.NOT_FOUND,"Semester registration is not found!")
+}
+
+const isOfferedCourseExists= await OfferedCourse.findById(offeredCourse);
+if(!isOfferedCourseExists){
+  throw new AppError(StatusCodes.NOT_FOUND,"offered course is not found!")
+}
+
+const isStudentExists = await Student.findById(student);
+if(!isStudentExists){
+  throw new AppError(StatusCodes.NOT_FOUND,"student is not found!")
+}
+
+
+const faculty= await Faculty.findOne({id:facultyId}).select('_id');
+
+if(!faculty){
+  throw new AppError(StatusCodes.NOT_FOUND,"faculty is not found!")
+}
+
+// console.log(faculty);
+const isCourseBelongToFaculty=await EnrolledCourse.findOne({
+  semesterRegistration,
+  offeredCourse,
+  student,
+  faculty:faculty?._id
+})
+
+if(!isCourseBelongToFaculty){
+  throw new AppError(StatusCodes.FORBIDDEN,"You are forbidden")
+}
+
+const modifiedData:Record<string,unknown>={}
+console.log(modifiedData);
+
+if(courseMarks?.finalTerm){
+  const {classTest1,classTest2,midTerm,finalTerm}=isCourseBelongToFaculty.courseMarks;
+
+  const totalMarks=
+  Math.ceil(classTest1*0.1)+
+  Math.ceil(classTest2*0.1)+
+  Math.ceil(midTerm*0.3)+
+  Math.ceil(finalTerm*0.5);
+  const result=calculateGradeAndPoints(totalMarks);
+  
+  modifiedData.grade=result.grade;
+  modifiedData.gradePoints=result.gradePoints;
+  modifiedData.isCompleted=true;
+}
+
+if(courseMarks&&Object.keys(courseMarks).length){
+  for(const [key,value] of Object.entries(courseMarks)){
+    modifiedData[`courseMarks.${key}`]=value;
+  }
+}
+console.log(modifiedData);
+const result=await EnrolledCourse.findByIdAndUpdate(
+  isCourseBelongToFaculty._id,
+  modifiedData,
+  {
+    new:true
+  }
+)
+
+return result;
+}
+
 export const EnrolledCourseServices={
-  createEnrolledCourseIntoDB
+  createEnrolledCourseIntoDB ,
+  updateEnrolledCourseMarksIntoDB
 }

@@ -80,7 +80,9 @@ const studentQuery = new QueryBuilder(Student.find()
 .fields();
 
 const result = await studentQuery.modelQuery;
-return result;
+const meta =await studentQuery.countTotal();
+
+return {meta, result }
 
 };
 
