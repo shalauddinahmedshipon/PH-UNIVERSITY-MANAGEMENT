@@ -47,7 +47,6 @@ const createStudentValidationSchema = z.object({
       emergencyContactNo: z.string().nonempty("Emergency contact number is required."),
       presentAddress: z.string().nonempty("Present address is required."),
       permanentAddress: z.string().nonempty("Permanent address is required."),
-      // profileImg: z.string().optional(),
       bloodGroup: z
         .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
         .optional()

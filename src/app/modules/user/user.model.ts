@@ -39,7 +39,7 @@ const UserSchema = new Schema<IUser,UserModel>({
   },
   role: {
     type: String,
-    enum:['admin','student','faculty'],
+    enum:['superAdmin','admin','student','faculty'],
 
   }
 },
@@ -50,6 +50,7 @@ const UserSchema = new Schema<IUser,UserModel>({
 
 // pre-save middleware / hooks 
 UserSchema.pre('save',async function(next){
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(user.password , Number(config.bcrypt_solt))
   // console.log(this,'pre-hook: we save data');

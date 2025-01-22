@@ -50,7 +50,6 @@ const deleteStudent = catchAsync(
 
 const getAllStudent= catchAsync(
   async (req, res) => {
-    // console.log("base query",req.query);
     const result = await StudentServices.getAllStudentFromDB(req.query);
    
       sendResponse(res,{

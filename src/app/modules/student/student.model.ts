@@ -8,8 +8,6 @@ import {
 } from './student.interface';
 import validator from 'validator';
 
-
-
 const userNameSchema = new Schema<IUserName>({
   firstName: {
     type: String,
@@ -125,17 +123,19 @@ const studentSchema = new Schema<TStudent,StudentModel>({
     type: String,
     required: [true, 'Permanent address is required.'],
   },
-  profileImg: { type: String },
+  profileImg: { type: String ,default:'' },
 
   academicDepartment: {
     type: Schema.Types.ObjectId,
     ref: 'AcademicDepartment',
-    required: true,
+  },
+  academicFaculty: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicFaculty',
   },
   admissionSemester:{
     type: Schema.Types.ObjectId,
     ref:'AcademicSemester',
-    required:true
   },
   bloodGroup: {
     type: String,

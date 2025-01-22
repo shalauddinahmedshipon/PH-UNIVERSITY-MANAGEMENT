@@ -2,6 +2,8 @@ import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { AcademicDepartmentControllers } from './academicDepartment.controllers';
 import { AcademicDepartmentValidation } from './academicDepartment.validation';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constant';
 
 
 
@@ -9,6 +11,7 @@ import { AcademicDepartmentValidation } from './academicDepartment.validation';
 const router = express.Router();
 
 router.post('/create-academic-department',
+  auth(USER_ROLE.superAdmin,USER_ROLE.admin),
   // validateRequest(AcademicDepartmentValidation.createAcademicDepartmentValidationSchema),
   AcademicDepartmentControllers.createAcademicDepartment
   

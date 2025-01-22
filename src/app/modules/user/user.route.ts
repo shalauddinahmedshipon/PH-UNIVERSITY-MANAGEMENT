@@ -11,10 +11,9 @@ import { upload } from '../../utils/sendImageToCloudinary';
 const router = express.Router();
 router.post(
   '/create-student',
-  // auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin,USER_ROLE.superAdmin),
   upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     req.body = JSON.parse(req.body.data);
     next();
   },
@@ -23,22 +22,33 @@ router.post(
 );
 router.post(
   '/create-faculty',
+  auth(USER_ROLE.admin,USER_ROLE.superAdmin),
+  upload.single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(createFacultyValidationSchema),
-  auth(USER_ROLE.admin),
   UserController.createFaculty,
 );
 
 router.post(
   '/create-admin',
+  auth(USER_ROLE.admin,USER_ROLE.superAdmin),
+  upload.single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(createAdminValidationSchema),
   UserController.createAdmin,
 );
 router.get(
-  '/me',auth(USER_ROLE.admin,USER_ROLE.faculty,USER_ROLE.student),
+  '/me',auth(USER_ROLE.admin,USER_ROLE.faculty,USER_ROLE.student,USER_ROLE.superAdmin),
   UserController.getMe,
 );
 router.post(
-  '/change-status/:id',auth(USER_ROLE.admin),
+  '/change-status/:id',  auth(USER_ROLE.admin,USER_ROLE.superAdmin),
   validateRequest(userValidation.changeStatusValidationSchema)
   ,
   UserController.changeStatus,
