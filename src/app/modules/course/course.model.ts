@@ -11,7 +11,7 @@ const preRequisiteCoursesSchema= new Schema<TPreRequisiteCourses>({
     type:Boolean,
     default:false
   }
-})
+},{_id:false})
 
 const courseSchema = new Schema<TCourse>({
   title:{
