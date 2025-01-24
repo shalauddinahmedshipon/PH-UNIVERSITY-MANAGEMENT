@@ -1,9 +1,8 @@
-import mongoose, { Schema} from 'mongoose';
+import { model, Schema} from 'mongoose';
 import { Days } from './offeredCourse.constant';
+import { TOfferedCourse } from './offeredCourse.interface';
 
-
-
-const OfferedCourseSchema = new Schema({
+const OfferedCourseSchema = new Schema<TOfferedCourse>({
   semesterRegistration: {
     type: Schema.Types.ObjectId,
     ref: 'SemesterRegistration',
@@ -60,6 +59,6 @@ const OfferedCourseSchema = new Schema({
 });
 
 
-const OfferedCourse = mongoose.model('OfferedCourse', OfferedCourseSchema);
+const OfferedCourse = model<TOfferedCourse>('OfferedCourse', OfferedCourseSchema);
 
 export default OfferedCourse;

@@ -86,14 +86,12 @@ const updateCourseIntoDB = async(id:string,payload:Partial<TCourse>)=>{
   await session.commitTransaction();
   await session.endSession();
  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
     throw new AppError(StatusCodes.BAD_REQUEST,"Failed to update course")
   }
- 
-  
-
   
 }
 
@@ -109,6 +107,12 @@ const assignFacultiesWithCourseIntoDB = async(id:string,payload:Partial<TCourse>
 
   return result
 }
+
+const getFacultiesWithCourseFromDB = async (courseId: string) => {
+  const result = await CourseFaculty.findOne({course:courseId}).populate('faculties');
+  return result;
+};
+
 const removeFacultiesWithCourseFromDB = async(id:string,payload:Partial<TCourse>)=>{
   const result = await CourseFaculty.findByIdAndUpdate(id,{
   
@@ -127,5 +131,6 @@ export const CourseServices ={
   updateCourseIntoDB,
   deleteCourseFromDB,
   assignFacultiesWithCourseIntoDB,
+  getFacultiesWithCourseFromDB,
   removeFacultiesWithCourseFromDB
 }

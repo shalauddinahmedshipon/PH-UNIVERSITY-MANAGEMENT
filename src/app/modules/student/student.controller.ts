@@ -56,7 +56,8 @@ const getAllStudent= catchAsync(
         statusCode:StatusCodes.OK,
         success:true,
         message:'All Student Retrieve successfully',
-        data:result
+        meta:result.meta,
+        data:result.result,
       })
   }
 );

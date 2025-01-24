@@ -3,8 +3,6 @@ import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../utils/catchAsync';
 import { OfferedCourseServices } from './offeredCourse.service';
 
-
-
 const createOfferedCourse = catchAsync(
   async (req, res) => {
     const result = await OfferedCourseServices.createOfferedCourseIntoDB(req.body);
@@ -26,6 +24,19 @@ const getAllOfferedCourses = catchAsync(async (req, res) => {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'All OfferedCourses are retrieved successfully',
+    data: result,
+  });
+});
+
+const getMyOfferedCourses = catchAsync(async (req, res) => {
+  const userId= req.user.userId;
+
+  const result = await OfferedCourseServices.getMyOfferedCoursesFromDB(userId,req.query)
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'My OfferedCourses are retrieved successfully',
     data: result,
   });
 });
@@ -62,6 +73,6 @@ export const OfferedCourseControllers = {
   createOfferedCourse,
   getAllOfferedCourses,
   getSingleOfferedCourse,
-  updateOfferedCourse
- 
+  updateOfferedCourse,
+  getMyOfferedCourses
 };
