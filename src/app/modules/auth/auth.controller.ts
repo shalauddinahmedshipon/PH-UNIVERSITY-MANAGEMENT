@@ -11,7 +11,9 @@ const loginUser = catchAsync(
    const {refreshToken,accessToken,needsPasswordChange} = result;
    res.cookie('refreshToken',refreshToken,{
     secure:process.env.NODE_ENV==='production',
-    httpOnly:true
+    httpOnly:true,
+    // sameSite:'none',
+    // maxAge: 1000 * 60 * 60 * 24 * 365,
    })
 
     sendResponse(res,{
